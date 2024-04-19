@@ -9,7 +9,7 @@ namespace Anket;
 
 public partial class MainWindow : Window
 {
-    private User _user;
+    public User _user;
     string? dateGender;
     public MainWindow()
     {
@@ -19,18 +19,26 @@ public partial class MainWindow : Window
 
     private void btnLoad_Click(object sender, RoutedEventArgs e)
     {
-        string fileName = $"{txtBoxLoad}.json";
-        string text = File.ReadAllText(fileName);
-        var json = JsonSerializer.Deserialize<User>(text);
+        try
+        {
+            string fileName = $"{txtBoxLoad}.json";
+            string text = File.ReadAllText(fileName);
+            var json = JsonSerializer.Deserialize<User>(text);
 
-        txtBoxFatherName.Text = json.FatherName;
-        txtBoxName.Text = json.Name;
-        txtBoxSurname.Text = json.Surname;
-        txtBoxCountry.Text = json.Country;
-        txtBoxCity.Text = json.City;
-        if(rbMale.Content.ToString() == json.Gender) rbMale.IsChecked = true;
-        else rbFemale.IsChecked = true;
-        Calendar.Text = json.Brithday.ToString();
+            txtBoxFatherName.Text = json.FatherName;
+            txtBoxName.Text = json.Name;
+            txtBoxSurname.Text = json.Surname;
+            txtBoxCountry.Text = json.Country;
+            txtBoxCity.Text = json.City;
+            if (rbMale.Content.ToString() == json.Gender) rbMale.IsChecked = true;
+            else rbFemale.IsChecked = true;
+            Calendar.Text = json.Brithday.ToString();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Not Found User");
+        }
+    
         
     }
 
@@ -38,8 +46,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            _user = new()
-            {
+            _user = new(){
                 FatherName = txtBoxFatherName.Text,
                 Name = txtBoxName.Text,
                 Surname = txtBoxSurname.Text,
@@ -55,7 +62,7 @@ public partial class MainWindow : Window
             File.WriteAllText(fileName, json);
             MessageBox.Show("Saveing User");
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
 
             MessageBox.Show("Eror Var");
